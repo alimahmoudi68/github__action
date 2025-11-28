@@ -7,4 +7,4 @@ jobs:
       - name: Print Hello
         run: echo "Hello"
       - name: Pritn goodby
-        run: echo "goofby!"
+        run: echo "goofby!!"
