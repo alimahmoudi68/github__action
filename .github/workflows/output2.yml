@@ -1,0 +1,27 @@
+name: Job Output Example
+
+on: [push]
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+
+    # تعریف خروجی‌های job
+    outputs:
+      my_output: ${{ steps.set_output.outputs.message }}
+
+    steps:
+      - name: Set output
+        id: set_output
+        run: |
+          echo "message=سلام از job اول 👋" >> $GITHUB_OUTPUT
+
+  job2:
+    runs-on: ubuntu-latest
+    needs: job1 # وابسته به job1
+
+    steps:
+      - name: Use output from job1
+        run: |
+          echo "خروجی job1 این بود:"
+          echo "${{ needs.job1.outputs.my_output }}"
