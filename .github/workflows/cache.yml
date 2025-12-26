@@ -1,0 +1,32 @@
+name: Job Output Example
+
+on: [push]
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Cache deoendencies
+        uses: actions/chache@v3 # پوشه .npm رو توی سرور های گیتهاب ذخیره میکنه تا توی جا های بعدی از اون استفاده کنه
+        with:
+          path: ~/.npm  # توی لینوکس اینجا ذخیره میشه
+          key: deps-node-modules-${{ hashFiles('**/packages-lock-.json') }} # بر اساس هر چی این فایل رو پیددا کرده یک چیزی هش شده درست میکنه
+      - name: install dependencies
+        run: npm ci
+  job2:
+    runs-on: ubuntu-latest
+    needs: job1 # وابسته به job1
+
+    steps:
+       - name: Get code
+        uses: actions/checkout@v3
+      - name: Cache deoendencies
+        uses: actions/chache@v3 # توی جایی که میخواهیم از کش استفاده کنیم عینا کپی میکنیم این تیکه رو
+        with:
+          path: ~/.npm  
+          key: deps-node-modules-${{ hashFiles('**/packages-lock-.json') }} # بر اساس هر چی این فایل رو پیددا کرده یک چیزی هش شده درست میکنه
+      - name: install dependencies
+        run: npm ci
